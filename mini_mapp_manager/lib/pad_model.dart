@@ -27,3 +27,20 @@ class Pad extends Equatable {
     );
   }
 }
+
+class Destination extends Equatable {
+  final String desc;
+  final String imagePath;
+
+  const Destination({required this.desc, required this.imagePath});
+
+  factory Destination.fromDesc(String desc) {
+    //TODO List all posible destinations
+    List<Destination> list = <Destination>[];
+
+    return list.where((element) => element.desc == desc).first;
+  }
+
+  @override
+  List<Object?> get props => [desc, imagePath];
+}
