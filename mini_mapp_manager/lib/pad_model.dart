@@ -2,28 +2,30 @@ part of mini_mapp_manager;
 
 class Pad extends Equatable {
   final int current;
-  final String front;
-  final String back;
-  final String left;
-  final String right;
+  final Map<String, String> link;
+  final List<String> dest;
 
-  const Pad(
-      {required this.current,
-      required this.front,
-      required this.back,
-      required this.left,
-      required this.right});
+  const Pad({required this.current, required this.link, required this.dest});
 
   @override
-  List<Object?> get props => [current, front, back, left, right];
+  List<Object?> get props => [current, link, dest];
+
+  List<Destination> getDestination() {
+    return dest.map((e) => Destination.fromDesc(e)).toList();
+  }
 
   factory Pad.fromMap(Map<String, dynamic> data) {
     return Pad(
-      current: data['current'],
-      front: data['front'] ?? "",
-      back: data['back'] ?? "",
-      left: data['left'] ?? "",
-      right: data['right'] ?? "",
+        current: data['current'],
+        link: data['link'] ?? <String, String>{},
+        dest: data['dest'] ?? <String>[]);
+  }
+
+  factory Pad.empty() {
+    return const Pad(
+      current: 0,
+      link: <String, String>{},
+      dest: <String>[],
     );
   }
 }
@@ -31,16 +33,37 @@ class Pad extends Equatable {
 class Destination extends Equatable {
   final String desc;
   final String imagePath;
+  static const List<Destination> listDest = <Destination>[];
 
   const Destination({required this.desc, required this.imagePath});
 
-  factory Destination.fromDesc(String desc) {
-    //TODO List all posible destinations
-    List<Destination> list = <Destination>[];
+  bool isExist(String desc) {
+    return listDest.any((element) => element.desc == desc);
+  }
 
-    return list.where((element) => element.desc == desc).first;
+  factory Destination.fromDesc(String desc) {
+    return listDest.where((element) => element.desc == desc).first;
   }
 
   @override
   List<Object?> get props => [desc, imagePath];
+}
+
+class Bridge extends Destination {
+  final String end;
+  static const List<Bridge> listBrid = <Bridge>[];
+  const Bridge({required this.end, required desc, required imagePath})
+      : super(desc: desc, imagePath: imagePath);
+
+  @override
+  bool isExist(String desc) {
+    return listBrid.any((element) => element.desc == desc);
+  }
+
+  factory Bridge.fromDesc(String desc) {
+    return listBrid.where((element) => element.desc == desc).first;
+  }
+
+  @override
+  List<Object?> get props => [end, desc, imagePath];
 }
