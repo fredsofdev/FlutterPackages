@@ -4,7 +4,6 @@ abstract class PadManager {
   List<Destination> getAllDestinations();
   void selectTargetDestination(Destination destination);
   void setStartingPad(Pad start);
-  void setCurrentPad(Pad current);
   void cancelRoute();
 }
 
@@ -13,9 +12,8 @@ class SamplePadManager implements PadManager {
 
   late List<Pad> allPads;
   List<Pad> route = <Pad>[];
-  Pad currentPad = Pad.empty();
+  Pad currentPas = Pad.empty();
   Pad targetPad = Pad.empty();
-  Orientation orient = Orientation.unknown;
 
   SamplePadManager(this.padProvider) {
     allPads = padProvider.getCurrentPads();
@@ -23,9 +21,8 @@ class SamplePadManager implements PadManager {
 
   @override
   void cancelRoute() {
-    orient = Orientation.unknown;
     route.clear();
-    currentPad = Pad.empty();
+    currentPas = Pad.empty();
     targetPad = Pad.empty();
   }
 
@@ -47,11 +44,26 @@ class SamplePadManager implements PadManager {
 
   @override
   void setStartingPad(Pad start) {
+    currentPas = start;
     var rawQueue = getQueue(start);
     var reversQ = rawQueue.reversed.toList();
     var startIndex = reversQ.indexOf(targetPad);
     reversQ = reversQ.getRange(startIndex, reversQ.length - 1).toList();
-    for (var pad in reversQ) {}
+    Pad currentPad = reversQ.first;
+    var reverceRout = <Pad>[currentPad];
+    while (currentPad != reversQ.last) {
+      var allNaPad = currentPad.link.values
+          .map((e) => reversQ.singleWhere((element) =>
+              element.current == int.parse(e) &&
+              !reverceRout.contains(element)))
+          .toList();
+      var indexList = allNaPad.map((e) => reversQ.indexOf(e)).toList();
+      indexList.sort((a, b) => a.compareTo(b));
+      var nextIndex = indexList.last;
+      currentPad = reversQ[nextIndex];
+      reverceRout.add(currentPad);
+    }
+    route = reverceRout.reversed.toList();
   }
 
   List<Pad> getQueue(Pad start) {
@@ -81,11 +93,6 @@ class SamplePadManager implements PadManager {
       storeList.clear();
     }
     return padQue;
-  }
-
-  @override
-  void setCurrentPad(Pad current) {
-    // TODO: implement setCurrentPad
   }
 }
 

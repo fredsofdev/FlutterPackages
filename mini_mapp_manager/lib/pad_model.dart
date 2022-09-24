@@ -21,13 +21,11 @@ class Pad extends Equatable {
         dest: data['dest'] ?? <String>[]);
   }
 
-  factory Pad.empty() {
-    return const Pad(
-      current: 0,
-      link: <String, String>{},
-      dest: <String>[],
-    );
-  }
+  factory Pad.empty() => const Pad(
+        current: 0,
+        link: <String, String>{},
+        dest: <String>[],
+      );
 }
 
 class Destination extends Equatable {
