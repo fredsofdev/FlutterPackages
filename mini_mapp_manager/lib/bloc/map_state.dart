@@ -5,14 +5,11 @@ class MapState extends Equatable {
   final bool isCorrect;
   final Pad curPad;
 
-  const MapState(
-      {this.movements = const <Movement>[],
-      this.isCorrect = true,
-      this.curPad = const Pad(
-        current: 0,
-        link: <String, String>{},
-        dest: <String>[],
-      )});
+  const MapState({
+    this.movements = const <Movement>[],
+    this.isCorrect = true,
+    this.curPad = Pad.empty,
+  });
 
   MapState updateState({
     List<Movement>? movements,

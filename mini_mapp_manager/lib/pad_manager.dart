@@ -12,8 +12,8 @@ class SamplePadManager implements PadManager {
 
   late List<Pad> allPads;
   List<Pad> route = <Pad>[];
-  Pad currentPas = Pad.empty();
-  Pad targetPad = Pad.empty();
+  Pad currentPas = Pad.empty;
+  Pad targetPad = Pad.empty;
 
   SamplePadManager(this.padProvider) {
     allPads = padProvider.getCurrentPads();
@@ -22,15 +22,15 @@ class SamplePadManager implements PadManager {
   @override
   void cancelRoute() {
     route.clear();
-    currentPas = Pad.empty();
-    targetPad = Pad.empty();
+    currentPas = Pad.empty;
+    targetPad = Pad.empty;
   }
 
   @override
   List<Destination> getAllDestinations() {
     List<Destination> list = <Destination>[];
     for (var element in allPads) {
-      list.addAll(element.getDestination());
+      list.addAll(element.dest);
     }
     return list;
   }
@@ -95,5 +95,3 @@ class SamplePadManager implements PadManager {
     return padQue;
   }
 }
-
-enum Orientation { unknown, correct, incorrect }
